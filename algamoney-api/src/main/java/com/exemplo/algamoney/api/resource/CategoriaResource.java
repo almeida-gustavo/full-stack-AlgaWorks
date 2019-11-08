@@ -23,7 +23,7 @@ public class CategoriaResource {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-//  Isso é para poder chamar o eveneto ao invés de ficar usando o Uri uri = ....
+//  Isso é para poder chamar o evento ao invés de ficar usando o Uri uri = ....
     @Autowired
     private ApplicationEventPublisher publisher;
 
@@ -35,7 +35,7 @@ public class CategoriaResource {
 //    @GetMapping
 //    public ResponseEntity<?> listar(){
 //        List<Categoria> categorias = categoriaRepository.findAll();
-//        return categorias.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(categorias);
+//        return categorias.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(categorias);
 //    }
 
     @PostMapping
@@ -64,6 +64,12 @@ public class CategoriaResource {
         return this.categoriaRepository.findById(codigo)
                 .map(categoria -> ResponseEntity.ok(categoria))
                 .orElse(ResponseEntity.notFound().build());
+
+//        Neste exemplo, fizemos a chamada ao método findById que nos retornou um Optional do tipo Categoria.
+//        Usamos o método map, para transformar o objeto que foi retornado como Optional (isso é feito caso o mesmo não seja null), depois retorna o objeto transformado em Optional novamente.
+//        Como o retorno do próprio map também é um Optional, podemos utilizar o método orElse, para retornarmos notFound, como mostrado na imagem acima.
     }
+
+
 
 }

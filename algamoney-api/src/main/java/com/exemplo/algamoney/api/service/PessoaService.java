@@ -30,6 +30,8 @@ public class PessoaService {
 
         pessoaSalva.setAtivo(ativo);
         pessoaRepository.save(pessoaSalva);
+
+//   Neste caso, utilizamos o método orElseThrow(...) de Optional, o que significa que caso o Optional obtido pela consulta esteja sem conteúdo, iremos lançar uma exceção.
     }
 
 }

@@ -50,6 +50,7 @@ public class PessoaResource {
                 .buildAndExpand(pessoaSalva.getCodigo()).toUri();
         return ResponseEntity.created(uri).body(pessoaSalva);
 
+//        Essa forma abaixo não está mais funcionando o envio do header.
 //        publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
 //        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
     }

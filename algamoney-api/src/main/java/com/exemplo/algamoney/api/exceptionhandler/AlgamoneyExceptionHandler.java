@@ -26,7 +26,7 @@ import java.util.List;
 //Com esse Controller Adivce ele vai observar todos os controllers da aplicação
 @ControllerAdvice
 public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
-    //ResponseEntityExceptionHandler : captura exceções de respostas de entidades
+    //ResponseEntityExceptionHandler : captura exceções de respostas de entidades, ela vai liberar os vários métodos handle
 
     @Autowired
     private MessageSource messageSource;
@@ -45,11 +45,26 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, erros , headers, HttpStatus.BAD_REQUEST, request);
     }
 
+
 //Quando o usuário enviar as informações invalidas.
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        //o bindingResult é que vc tem a lista de todos os erros e é ele que vc passa para a função criarListaDeErros
         List<Erro> erros = criarListaDeErros(ex.getBindingResult());
         return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    public static class Erro {
+        @Getter
+        private String mensagemUsuario;
+        @Getter
+        private String mensagemDesenvolvedor;
+
+        //Construtor
+        public Erro(String mensagemUsuario, String mensagemDesenvolvedor) {
+            this.mensagemUsuario = mensagemUsuario;
+            this.mensagemDesenvolvedor = mensagemDesenvolvedor;
+        }
     }
 
 
@@ -66,22 +81,10 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
         return erros;
     }
 
-    public static class Erro {
-        @Setter @Getter
-        private String mensagemUsuario;
-        @Setter @Getter
-        private String mensagemDesenvolvedor;
-
-        public Erro(String mensagemUsuario, String mensagemDesenvolvedor) {
-            this.mensagemUsuario = mensagemUsuario;
-            this.mensagemDesenvolvedor = mensagemDesenvolvedor;
-        }
-    }
-
-
+//    Nem todos os métodos vão existir, é por isso que vc pode criar os seus quando necessário
 //    Criando um método para tratar de quando deletar algo que não tem no banco de dados.
 //    Para você pode dizer ao spring que ele deve usar esse método para tratar algum problema,
-//    você deve usar esse @ExceptionHandler e colocar quais erros você está se referindo.
+//    você deve usar esse @ExceptionHandler e colocar quais erros você está se referindo... Esse erro é pego lá na descrição do erro quando vc tentou deletar um código que não existia
     @ExceptionHandler({EmptyResultDataAccessException.class})
 //    @ResponseStatus(HttpStatus.NOT_FOUND) Você pode usar só essa linha de comando sem as demais dentro dessa função se não quiser enviar nenhuma mensagem de retorno
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request){

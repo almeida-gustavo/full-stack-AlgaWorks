@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
 @Table(name = "categoria")
@@ -21,4 +22,16 @@ public class Categoria {
     private  String nome;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Categoria)) return false;
+        Categoria categoria = (Categoria) o;
+        return Objects.equals(getCodigo(), categoria.getCodigo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCodigo());
+    }
 }
