@@ -7,22 +7,27 @@ CREATE TABLE lancamento(
     observacao VARCHAR(100),
     tipo VARCHAR(20) NOT NULL,
     codigo_categoria BIGINT NOT NULL,
-    codigo_pessoa BIGINT NOT NULL
+    codigo_pessoa BIGINT NOT NULL,
+    CONSTRAINT codigo_categoria_fk FOREIGN KEY (codigo_categoria) REFERENCES categoria(codigo),
+    CONSTRAINT codigo_pessoa_fk FOREIGN KEY (codigo_pessoa) REFERENCES pessoa(codigo)
 );
 
-ALTER TABLE public.lancamento ADD CONSTRAINT codigo_categoria_fk
-FOREIGN KEY (codigo_categoria)
-REFERENCES public.lancamento (codigo)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
+-- SE IMPLEMENTAR A CHAVE ESTRANGEIRA CONFORME ABAIXO, ELE NAO VAI PERMITIR A EXCLUSAO DE UM REGISTRO
+--QUE TENHA UMA RELACAO MESMO QUE SEJA COM UMA CHAVE ESTRANGEIRA
 
-ALTER TABLE public.lancamento ADD CONSTRAINT codigo_pessoa_fk
-FOREIGN KEY (codigo_pessoa)
-REFERENCES public.lancamento (codigo)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
+-- ALTER TABLE public.lancamento ADD CONSTRAINT codigo_categoria_fk
+-- FOREIGN KEY (codigo_categoria)
+-- REFERENCES public.lancamento (codigo)
+-- ON DELETE NO ACTION
+-- ON UPDATE NO ACTION
+-- NOT DEFERRABLE;
+--
+-- ALTER TABLE public.lancamento ADD CONSTRAINT codigo_pessoa_fk
+-- FOREIGN KEY (codigo_pessoa)
+-- REFERENCES public.lancamento (codigo)
+-- ON DELETE NO ACTION
+-- ON UPDATE NO ACTION
+-- NOT DEFERRABLE;
 
 INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo, codigo_categoria, codigo_pessoa) values ('Salário mensal', '2017-06-10', null, 6500.00, 'Distribuição de lucros', 'RECEITA', 1, 1);
 INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo, codigo_categoria, codigo_pessoa) values ('Bahamas', '2017-02-10', '2017-02-10', 100.32, null, 'DESPESA', 2, 2);

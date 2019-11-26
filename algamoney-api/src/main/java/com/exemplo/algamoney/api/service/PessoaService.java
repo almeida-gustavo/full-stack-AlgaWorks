@@ -15,8 +15,7 @@ public class PessoaService {
 
 
     public Pessoa atualizar(Long codigo, Pessoa pessoa){
-        Pessoa pessoaSalva = this.pessoaRepository.findById(codigo)
-                .orElseThrow(() -> new EmptyResultDataAccessException(1));
+        Pessoa pessoaSalva = buscarPessoaPeloCodigo(codigo);
 
 //Explicação dos campos: 1: dados que vc quer passar, 2: para onde vc quer passar os dados, 3: ignorando quais propriedades. como vc não passa o id vc vai ignorar ele
         BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
@@ -25,13 +24,17 @@ public class PessoaService {
 
 
     public void atualizarPropriedadeAtivo(Long codigo, Boolean ativo){
-        Pessoa pessoaSalva = this.pessoaRepository.findById(codigo)
-                .orElseThrow(() -> new EmptyResultDataAccessException(1));
+        Pessoa pessoaSalva = buscarPessoaPeloCodigo(codigo);
 
         pessoaSalva.setAtivo(ativo);
         pessoaRepository.save(pessoaSalva);
 
+    }
+
 //   Neste caso, utilizamos o método orElseThrow(...) de Optional, o que significa que caso o Optional obtido pela consulta esteja sem conteúdo, iremos lançar uma exceção.
+    public Pessoa buscarPessoaPeloCodigo(Long codigo) {
+        return this.pessoaRepository.findById(codigo)
+                .orElseThrow(() -> new EmptyResultDataAccessException(1));
     }
 
 }

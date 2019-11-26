@@ -5,6 +5,8 @@ import com.exemplo.algamoney.api.model.Categoria;
 import com.exemplo.algamoney.api.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +29,11 @@ public class CategoriaResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
+    @CrossOrigin(maxAge = 10)
+    //VOCÊ PODE CRIAR O PAGE DIRETO AQUI AO INVÉS DA LISTA SEM TER QUE IMPLEMENTAR O FILTER E AS QUERYS
     @GetMapping
-    public List<Categoria> listar(){
-        return categoriaRepository.findAll();
+    public Page<Categoria> listar(Pageable pageable){
+        return categoriaRepository.findAll(pageable);
     }
 //    Essa forma é a mesma que de cima, só que vc está retornando alguns tipos de mensagens para validação
 //    @GetMapping

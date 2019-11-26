@@ -1,5 +1,6 @@
 package com.exemplo.algamoney.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +27,11 @@ public class Pessoa {
     @Embedded
     private Endereco endereco;
 
+    @JsonIgnore
+    @Transient
+    public boolean isInativo(){
+        return !this.ativo;
+    }
 
 
 
