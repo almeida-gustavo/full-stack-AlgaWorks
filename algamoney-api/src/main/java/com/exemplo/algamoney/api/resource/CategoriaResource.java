@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -29,9 +30,9 @@ public class CategoriaResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
-    @CrossOrigin(maxAge = 10)
     //VOCÊ PODE CRIAR O PAGE DIRETO AQUI AO INVÉS DA LISTA SEM TER QUE IMPLEMENTAR O FILTER E AS QUERYS
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('read')")
     public Page<Categoria> listar(Pageable pageable){
         return categoriaRepository.findAll(pageable);
     }
@@ -43,6 +44,7 @@ public class CategoriaResource {
 //    }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
 //    @ResponseStatus(HttpStatus.CREATED) Você pode passar aqui se não for usar o ResponseEntity como abaixo
     public ResponseEntity<Categoria> criarCategoria(@Valid @RequestBody Categoria categoria, HttpServletResponse response){
       Categoria categoriaSalva =  categoriaRepository.save(categoria);
@@ -59,6 +61,7 @@ public class CategoriaResource {
     }
 
     @GetMapping("/{codigo}")
+    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('read')")
     public ResponseEntity buscarPeloCodigo(@PathVariable Long codigo){
 
 //        Tanto esse quanto o de baixo faz a mesma coisa, são apenas dois métodos diferentes.

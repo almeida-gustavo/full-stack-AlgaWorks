@@ -2,6 +2,7 @@ package com.exemplo.algamoney.api.config;
 
 import antlr.Token;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,9 +25,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    //aqui deveria ir um autowired mas quando coloca ele da erro.
+    @Autowired
     private UserDetailsService userDetailsService;
-
 
 
     @Override
@@ -36,8 +36,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret("$2a$10$G1j5Rf8aEEiGc/AET9BA..xRR.qCpOUzBZoJd8ygbGy6tb3jsMT9G")
                 .scopes("read", "write")   //Com esse escopo vc consegue limitar o que o tal cliente vai conseguir acessar
                 .authorizedGrantTypes("password", "refresh_token") //esse refresh token eh o que eh usado para dar um novo access token
-                .accessTokenValiditySeconds(60)
+                .accessTokenValiditySeconds(60 * 15)
+                .refreshTokenValiditySeconds(3600 * 24)
+            .and()
+                .withClient("mobile")
+                .secret("$2a$10$KJRZ.d9lgifvJU420wX7Oeb2sA3mgnGjv9iyUWNqcN1RxjXnKfcKK") // m0b1l30
+                .scopes("read") //vc ta definindo que o escopo para mobile é apenas de leitura, então mesmo se tiver com o user admin ele não vai deixar vc adicionar dados... o escopo está listado lá no controller
+                .authorizedGrantTypes("password", "refresh_token")
+                .accessTokenValiditySeconds(1800)
                 .refreshTokenValiditySeconds(3600 * 24);
+
     }
 
     @Override
